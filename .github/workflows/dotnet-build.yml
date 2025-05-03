@@ -15,11 +15,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: List files for debugging
+      run: ls -R
+  
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x' 
+        dotnet-version: '8.0.x'
 
+    - name: Clear NuGet cache
+      run: dotnet nuget locals all --clear
+
+    - name: Debug current directory
+      run: pwd
+  
     - name: Restore dependencies
       run: dotnet restore github4women/github4women.csproj
 
