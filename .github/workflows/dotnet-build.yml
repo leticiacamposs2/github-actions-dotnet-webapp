@@ -30,7 +30,7 @@ jobs:
       run: pwd
   
     - name: Restore dependencies
-      run: dotnet restore github4women.csproj # Corrected path
+      run: dotnet restore github4women/github4women.csproj
 
     - name: Build project
       run: dotnet build --no-restore --configuration Release
