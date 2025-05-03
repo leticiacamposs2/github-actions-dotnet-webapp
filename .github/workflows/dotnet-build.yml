@@ -26,6 +26,5 @@ jobs:
     - name: Build project
       run: dotnet build --no-restore --configuration Release
 
-    # Script personalizado para exibir a data e hora da execução
     - name: Custom script - Log execution time
       run: echo "Workflow executado em $(date)"
