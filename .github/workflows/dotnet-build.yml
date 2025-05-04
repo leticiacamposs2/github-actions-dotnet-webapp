@@ -18,26 +18,45 @@ jobs:
         fetch-depth: 0  # Garante que o histórico completo seja baixado
         
     - name: List files for debugging
-      run: ls -R
-  
+      run: ls -R  # Lista todos os arquivos e diretórios para ajudar na depuração
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '8.0.x'  # Configura o ambiente para usar a versão correta do .NET
 
     - name: Clear NuGet cache
-      run: dotnet nuget locals all --clear
+      run: dotnet nuget locals all --clear  # Limpa o cache do NuGet para evitar problemas com pacotes antigos
 
     - name: Debug current directory
-      run: pwd
+      run: pwd  # Exibe o diretório atual para depuração
   
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore # Restaura os pacotes NuGet necessários para o projeto
+      working-directory: github4women
+      
+    - name: Verify and format code
+      run: dotnet format --verify-no-changes  # Garante que o código está formatado corretamente antes da compilação
       working-directory: github4women
 
-    - name: Build project
-      run: dotnet build --configuration Release --no-restore
+    - name: Static code analysis
+      run: dotnet build --configuration Release --analyze # Executa uma análise estática para detectar possíveis erros
       working-directory: github4women
+      
+    - name: Check for outdated NuGet packages
+      run: dotnet list package --outdated # Lista pacotes desatualizados para que possam ser atualizados
+      working-directory: github4women  
+
+    - name: Measure execution time
+      run: | # Mede o tempo total da execução para monitorar a performance
+        echo "Tempo de início: $(date)"
+        dotnet build --configuration Release --no-restore
+        echo "Tempo de término: $(date)"
+      working-directory: github4women
+      
+    - name: Build project
+      run: dotnet build --configuration Release --no-restore # Compila o projeto na configuração Release
+      working-directory: github4women  
             
-    - name: Custom script - Log execution time
-      run: echo "Workflow executado em $(date)"
+    - name: Custom script - Log execution time 
+      run: echo "Workflow executado em $(date)" # Registra a hora de execução no log  
